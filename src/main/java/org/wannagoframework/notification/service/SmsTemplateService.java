@@ -21,7 +21,6 @@ package org.wannagoframework.notification.service;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.wannagoframework.notification.domain.SmsActionEnum;
 import org.wannagoframework.notification.domain.SmsTemplate;
 
 
@@ -31,9 +30,9 @@ public interface SmsTemplateService extends BaseCrudService<SmsTemplate> {
 
   long countAnyMatching(String filter);
 
-  long countBySmsAction(SmsActionEnum smsAction);
+  long countBySmsAction(String smsAction);
 
-  Optional<SmsTemplate> findBySmsAction(SmsActionEnum smsAction, String iso3Language);
+  Optional<SmsTemplate> findBySmsAction(String smsAction, String iso3Language);
 
   SmsTemplate add(SmsTemplate smsTemplate);
 

@@ -23,7 +23,6 @@ import org.springframework.stereotype.Component;
 import org.wannagoframework.commons.utils.HasLogger;
 import org.wannagoframework.commons.utils.OrikaBeanMapper;
 import org.wannagoframework.dto.domain.notification.Mail;
-import org.wannagoframework.notification.domain.MailActionEnum;
 import org.wannagoframework.notification.service.MailService;
 
 /**
@@ -56,7 +55,7 @@ public class EmailReceiver implements HasLogger {
     logger().info(loggerPrefix + "Receiving a request from {} for sending email {} to {} ",
         mail.getApplicationName(), mail.getSubject(), mail.getTo());
     mailService
-        .sendEmail(mail.getTo(), MailActionEnum.valueOf(mail.getMailAction().name()),
+        .sendEmail(mail.getTo(), mail.getMailAction(),
             mail.getAttributes(), mail.getAttachements(),
             mail.getIso3Language());
   }

@@ -59,7 +59,7 @@ public class DockerEurekaClientConfiguration implements
   @Primary
   public EurekaClientConfigBean eurekaClientConfigBean(ConfigurableEnvironment env) {
     EurekaClientConfigBean client = new EurekaClientConfigBean();
-    if ("bootstrap".equals(this.env.getProperty("spring.config.name"))) {
+    if ("bootstrap" .equals(this.env.getProperty("spring.config.name"))) {
       client.setRegisterWithEureka(false);
     }
 

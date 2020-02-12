@@ -26,7 +26,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wannagoframework.commons.utils.HasLogger;
-import org.wannagoframework.notification.domain.SmsActionEnum;
 import org.wannagoframework.notification.domain.SmsTemplate;
 import org.wannagoframework.notification.repository.SmsTemplateRepository;
 
@@ -76,12 +75,12 @@ public class SmsTemplateServiceImpl implements SmsTemplateService, HasLogger {
   }
 
   @Override
-  public long countBySmsAction(SmsActionEnum smsAction) {
+  public long countBySmsAction(String smsAction) {
     return smsTemplateRepository.countBySmsActionAndIsActiveIsTrue(smsAction);
   }
 
   @Override
-  public Optional<SmsTemplate> findBySmsAction(SmsActionEnum smsAction, String iso3Language) {
+  public Optional<SmsTemplate> findBySmsAction(String smsAction, String iso3Language) {
     return smsTemplateRepository
         .findBySmsActionAndIso3LanguageAndIsActiveIsTrue(smsAction, iso3Language);
   }

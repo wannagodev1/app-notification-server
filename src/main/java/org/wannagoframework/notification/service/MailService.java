@@ -23,7 +23,6 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.wannagoframework.notification.domain.Mail;
-import org.wannagoframework.notification.domain.MailActionEnum;
 
 /**
  * @author WannaGo Dev1.
@@ -38,7 +37,8 @@ public interface MailService extends BaseCrudService<Mail> {
 
   void sendSimpleMail(String to, String subject, String text);
 
-  void sendEmail(String to, MailActionEnum emailAction, Map<String, String> attributes, Map<String, byte[]> attachments, String iso3Language);
+  void sendEmail(String to, String emailAction, Map<String, String> attributes,
+      Map<String, byte[]> attachments, String iso3Language);
 
   void saveAndSendMail(Mail mail);
 

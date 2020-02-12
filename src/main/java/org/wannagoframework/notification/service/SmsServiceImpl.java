@@ -95,8 +95,8 @@ public class SmsServiceImpl implements SmsService, HasLogger {
   }
 
   /**
-   * Save and then send the given sms. <br/> The SMS is firstly saved. Then we try to send it.
-   * At the end the SMS is updated (in case of status change)
+   * Save and then send the given sms. <br/> The SMS is firstly saved. Then we try to send it. At
+   * the end the SMS is updated (in case of status change)
    *
    * @param sms the email to be sent.
    */
@@ -106,6 +106,7 @@ public class SmsServiceImpl implements SmsService, HasLogger {
     sendSms(sms);
     smsMessageRepository.save(sms);
   }
+
   public void sendSms(Sms sms) {
     String loggerPrefix = getLoggerPrefix("sendSmsMessage");
     logger().debug(loggerPrefix + "Sending...");

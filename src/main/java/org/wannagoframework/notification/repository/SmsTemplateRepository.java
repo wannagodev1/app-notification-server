@@ -23,7 +23,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.wannagoframework.notification.domain.SmsActionEnum;
 import org.wannagoframework.notification.domain.SmsTemplate;
 
 /**
@@ -51,9 +50,9 @@ public interface SmsTemplateRepository extends MongoRepository<SmsTemplate, Stri
 
   long countByIsActive(Boolean isActive);
 
-  long countBySmsActionAndIsActiveIsTrue(SmsActionEnum smsAction);
+  long countBySmsActionAndIsActiveIsTrue(String smsAction);
 
   Optional<SmsTemplate> findBySmsActionAndIso3LanguageAndIsActiveIsTrue(
-      SmsActionEnum smsAction, String iso3Language);
+      String smsAction, String iso3Language);
 
 }

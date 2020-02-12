@@ -26,7 +26,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wannagoframework.commons.utils.HasLogger;
-import org.wannagoframework.notification.domain.MailActionEnum;
 import org.wannagoframework.notification.domain.MailTemplate;
 import org.wannagoframework.notification.repository.MailTemplateRepository;
 
@@ -76,12 +75,12 @@ public class MailTemplateServiceImpl implements MailTemplateService, HasLogger {
   }
 
   @Override
-  public long countByMailAction(MailActionEnum mailAction) {
+  public long countByMailAction(String mailAction) {
     return mailTemplateRepository.countByMailActionAndIsActiveIsTrue(mailAction);
   }
 
   @Override
-  public Optional<MailTemplate> findByMailAction(MailActionEnum mailAction, String iso3Language) {
+  public Optional<MailTemplate> findByMailAction(String mailAction, String iso3Language) {
     if (StringUtils.isNotBlank(iso3Language)) {
       return mailTemplateRepository
           .findByMailActionAndIso3LanguageAndIsActiveIsTrue(mailAction, iso3Language);

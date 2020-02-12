@@ -39,11 +39,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.wannagoframework.commons.utils.HasLogger;
 import org.wannagoframework.notification.domain.Mail;
-import org.wannagoframework.notification.domain.MailActionEnum;
 import org.wannagoframework.notification.domain.MailStatusEnum;
 import org.wannagoframework.notification.domain.MailTemplate;
 import org.wannagoframework.notification.repository.MailMessageRepository;
-import org.wannagoframework.notification.service.MailTemplateService;
 
 /**
  * @author WannaGo Dev1.
@@ -57,7 +55,7 @@ public class MailServiceImpl implements MailService, HasLogger {
   private final JavaMailSender emailSender;
 
   private final MailMessageRepository mailMessageRepository;
-private final MailTemplateService mailTemplateService;
+  private final MailTemplateService mailTemplateService;
 
   public MailServiceImpl(JavaMailSender emailSender,
       MailMessageRepository mailMessageRepository,
@@ -128,7 +126,7 @@ private final MailTemplateService mailTemplateService;
   }
 
   @Override
-  public void sendEmail(String to, MailActionEnum emailAction, Map<String, String> attributes,
+  public void sendEmail(String to, String emailAction, Map<String, String> attributes,
       Map<String, byte[]> attachments, String iso3Language) {
     String loggerPrefix = getLoggerPrefix("sendEmail");
 

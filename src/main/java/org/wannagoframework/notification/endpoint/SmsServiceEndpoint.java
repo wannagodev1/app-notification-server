@@ -83,7 +83,8 @@ public class SmsServiceEndpoint extends BaseEndpoint {
     String loggerPrefix = getLoggerPrefix("getById");
     try {
       return handleResult(loggerPrefix, mapperFacade.map(smsService
-          .load(query.getId()), org.wannagoframework.dto.domain.notification.Sms.class, getOrikaContext(query)));
+              .load(query.getId()), org.wannagoframework.dto.domain.notification.Sms.class,
+          getOrikaContext(query)));
     } catch (Throwable t) {
       return handleResult(loggerPrefix, t);
     }

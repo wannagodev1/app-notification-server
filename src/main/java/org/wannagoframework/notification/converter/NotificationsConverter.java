@@ -52,13 +52,17 @@ public class NotificationsConverter {
         .addMapper(org.wannagoframework.dto.domain.notification.Sms.class, Sms.class);
 
     orikaBeanMapper
-        .addMapper(MailTemplate.class, org.wannagoframework.dto.domain.notification.MailTemplate.class);
+        .addMapper(MailTemplate.class,
+            org.wannagoframework.dto.domain.notification.MailTemplate.class);
     orikaBeanMapper
-        .addMapper(org.wannagoframework.dto.domain.notification.MailTemplate.class, MailTemplate.class);
+        .addMapper(org.wannagoframework.dto.domain.notification.MailTemplate.class,
+            MailTemplate.class);
 
     orikaBeanMapper
-        .addMapper(SmsTemplate.class, org.wannagoframework.dto.domain.notification.SmsTemplate.class);
+        .addMapper(SmsTemplate.class,
+            org.wannagoframework.dto.domain.notification.SmsTemplate.class);
     orikaBeanMapper
-        .addMapper(org.wannagoframework.dto.domain.notification.SmsTemplate.class, SmsTemplate.class);
+        .addMapper(org.wannagoframework.dto.domain.notification.SmsTemplate.class,
+            SmsTemplate.class);
   }
 }

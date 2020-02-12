@@ -84,7 +84,8 @@ public class MailTemplateEndpoint extends BaseEndpoint {
     String loggerPrefix = getLoggerPrefix("getById");
     try {
       return handleResult(loggerPrefix, mapperFacade.map(mailTemplateService
-          .load(query.getId()), org.wannagoframework.dto.domain.notification.MailTemplate.class, getOrikaContext(query)));
+              .load(query.getId()), org.wannagoframework.dto.domain.notification.MailTemplate.class,
+          getOrikaContext(query)));
     } catch (Throwable t) {
       return handleResult(loggerPrefix, t);
     }

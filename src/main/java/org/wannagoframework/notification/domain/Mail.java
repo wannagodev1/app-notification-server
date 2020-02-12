@@ -47,7 +47,7 @@ public class Mail extends BaseEntity {
 
   private Map<String, byte[]> attachements;
 
-  private MailActionEnum mailAction;
+  private String mailAction;
 
   private MailStatusEnum mailStatus;
 

@@ -38,7 +38,7 @@ public class Sms extends BaseEntity {
 
   private String body;
 
-  private SmsActionEnum smsAction;
+  private String smsAction;
 
   private SmsStatusEnum smsStatus;
 

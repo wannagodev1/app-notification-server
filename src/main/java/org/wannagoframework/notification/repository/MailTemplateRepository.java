@@ -23,7 +23,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.wannagoframework.notification.domain.MailActionEnum;
 import org.wannagoframework.notification.domain.MailTemplate;
 
 /**
@@ -51,11 +50,11 @@ public interface MailTemplateRepository extends MongoRepository<MailTemplate, St
 
   long countByIsActive(Boolean isActive);
 
-  long countByMailActionAndIsActiveIsTrue(MailActionEnum mailAction);
+  long countByMailActionAndIsActiveIsTrue(String mailAction);
 
-  Optional<MailTemplate> findByMailActionAndIso3LanguageAndIsActiveIsTrue(MailActionEnum mailAction,
+  Optional<MailTemplate> findByMailActionAndIso3LanguageAndIsActiveIsTrue(String mailAction,
       String iso3Language);
 
-  Optional<MailTemplate> findByMailActionAndIsActiveIsTrue(MailActionEnum mailAction);
+  Optional<MailTemplate> findByMailActionAndIsActiveIsTrue(String mailAction);
 
 }
