@@ -23,7 +23,9 @@ import com.github.mongobee.changeset.ChangeSet;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.wannagoframework.notification.domain.Mail;
+import org.wannagoframework.notification.domain.MailTemplate;
 import org.wannagoframework.notification.domain.Sms;
+import org.wannagoframework.notification.domain.SmsTemplate;
 
 @Component
 @ChangeLog
@@ -33,6 +35,11 @@ public class InitialValuesChangeLog {
   public void createTransactionalCollections(MongoTemplate mongoTemplate) {
     mongoTemplate.createCollection(Sms.class);
     mongoTemplate.createCollection(Mail.class);
+  }
 
+  @ChangeSet(order = "002", id = "createTransactionalCollections2", author = "Wanna Go Dev1")
+  public void createTransactionalCollections2(MongoTemplate mongoTemplate) {
+    mongoTemplate.createCollection(MailTemplate.class);
+    mongoTemplate.createCollection(SmsTemplate.class);
   }
 }

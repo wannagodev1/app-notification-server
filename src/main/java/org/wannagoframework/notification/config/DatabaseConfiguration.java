@@ -40,9 +40,9 @@ import org.wannagoframework.commons.utils.HasLogger;
  */
 @Configuration
 @Import(value = MongoAutoConfiguration.class)
-@EntityScan("org.wannagoframework.notification.domain")
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableMongoRepositories(basePackages = "org.wannagoframework.notification.repository")
+@EntityScan("org.wannagoframework.notification.domain")
 @EnableTransactionManagement
 public class DatabaseConfiguration implements HasLogger {
 
