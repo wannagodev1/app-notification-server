@@ -125,6 +125,7 @@ public class MailServiceImpl implements MailService, HasLogger {
     mailMessageRepository.save(mail);
   }
 
+  @Transactional
   @Override
   public void sendEmail(String to, String emailAction, Map<String, String> attributes,
       Map<String, byte[]> attachments, String iso3Language) {
@@ -184,6 +185,7 @@ public class MailServiceImpl implements MailService, HasLogger {
     } finally {
       logger().debug(loggerPrefix + "Email sent status = {}", mailMessage.getMailStatus());
     }
+    mailMessageRepository.save( mailMessage );
   }
 
   public void sendMail(Mail mail) {
