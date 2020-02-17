@@ -18,11 +18,12 @@
       <param name="maximumMessageSize" value="8192"/>
       <param name="includeFullMdc" value="true"/>
 
-      <param name="additionalFields" value="APP =app-notification-server,ENV=devgcp"/>
+      <param name="additionalFields" value="APP=app-notification-server,ENV=devgcp"/>
       <param name="additionalFieldTypes" value="APP=String,ENV=String"/>
     </appender>
 
-    <logger level="DEBUG" name="org.wannago"/>
+    <logger level="DEBUG" name="org.wannagoframework"/>
+    <logger level="INFO"  name="org.springframework"/>
 
     <root level="INFO">
       <appender-ref ref="CONSOLE"/>
@@ -31,31 +32,11 @@
   </springProfile>
 
   <springProfile name="devlocal">
-    <appender name="GELF" class="biz.paluch.logging.gelf.logback.GelfLogbackAppender">
-      <param name="threshold" value="INFO"/>
-      <param name="host" value="udp:35.205.108.185"/>
-      <param name="port" value="12201"/>
-      <param name="version" value="1.1"/>
-      <param name="facility" value="gelf-test"/>
-      <param name="extractStackTrace" value="true"/>
-      <param name="filterStackTrace" value="true"/>
-      <param name="includeLocation" value="true"/>
-      <param name="mdcProfiling" value="true"/>
-      <param name="timestampPattern" value="yyyy-MM-dd HH:mm:ss,SSSS"/>
-      <param name="maximumMessageSize" value="8192"/>
-      <param name="includeFullMdc" value="true"/>
-
-      <param name="additionalFields" value="APP =app-notification-server,ENV=devlocal"/>
-      <param name="additionalFieldTypes" value="APP=String,ENV=String"/>
-    </appender>
-
-    <logger level="DEBUG" name="org.wannago"/>
+    <logger level="DEBUG" name="org.wannagoframework"/>
+    <logger level="INFO"  name="org.springframework"/>
 
     <root level="INFO">
       <appender-ref ref="CONSOLE"/>
-      <appender-ref ref="GELF"/>
     </root>
   </springProfile>
-
-  <logger level="INFO" name="org.springframework"/>
 </configuration>
