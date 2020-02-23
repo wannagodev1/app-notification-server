@@ -32,7 +32,6 @@ import org.wannagoframework.dto.serviceQuery.generic.DeleteByStrIdQuery;
 import org.wannagoframework.dto.serviceQuery.generic.FindAnyMatchingQuery;
 import org.wannagoframework.dto.serviceQuery.generic.GetByStrIdQuery;
 import org.wannagoframework.dto.serviceQuery.generic.SaveQuery;
-import org.wannagoframework.dto.utils.StoredFile;
 import org.wannagoframework.notification.domain.SmsTemplate;
 import org.wannagoframework.notification.service.SmsTemplateService;
 
@@ -93,7 +92,8 @@ public class SmsTemplateEndpoint extends BaseEndpoint {
   }
 
   @PostMapping(value = "/save")
-  public ResponseEntity<ServiceResult> save(@RequestBody SaveQuery<StoredFile> query) {
+  public ResponseEntity<ServiceResult> save(
+      @RequestBody SaveQuery<org.wannagoframework.dto.domain.notification.SmsTemplate> query) {
     String loggerPrefix = getLoggerPrefix("save");
     try {
       return handleResult(loggerPrefix, mapperFacade.map(smsTemplateService
