@@ -30,6 +30,7 @@ import org.wannagoframework.dto.serviceQuery.ServiceResult;
 import org.wannagoframework.dto.serviceQuery.generic.CountAnyMatchingQuery;
 import org.wannagoframework.dto.serviceQuery.generic.DeleteByStrIdQuery;
 import org.wannagoframework.dto.serviceQuery.generic.FindAnyMatchingQuery;
+import org.wannagoframework.dto.serviceQuery.generic.GetByNameQuery;
 import org.wannagoframework.dto.serviceQuery.generic.GetByStrIdQuery;
 import org.wannagoframework.dto.serviceQuery.generic.SaveQuery;
 import org.wannagoframework.notification.domain.SmsTemplate;
@@ -85,6 +86,18 @@ public class SmsTemplateEndpoint extends BaseEndpoint {
     try {
       return handleResult(loggerPrefix, mapperFacade.map(smsTemplateService
               .load(query.getId()), org.wannagoframework.dto.domain.notification.SmsTemplate.class,
+          getOrikaContext(query)));
+    } catch (Throwable t) {
+      return handleResult(loggerPrefix, t);
+    }
+  }
+
+  @PostMapping(value = "/getBySmsAction")
+  public ResponseEntity<ServiceResult> getBySmsAction(@RequestBody GetByNameQuery query) {
+    String loggerPrefix = getLoggerPrefix("getBySmsAction");
+    try {
+      return handleResult(loggerPrefix, mapperFacade.map(smsTemplateService
+              .getBySmsAction(query.getName()), org.wannagoframework.dto.domain.notification.SmsTemplate.class,
           getOrikaContext(query)));
     } catch (Throwable t) {
       return handleResult(loggerPrefix, t);

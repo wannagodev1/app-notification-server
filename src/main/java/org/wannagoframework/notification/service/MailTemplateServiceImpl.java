@@ -40,6 +40,10 @@ public class MailTemplateServiceImpl implements MailTemplateService, HasLogger {
     this.mailTemplateRepository = mailTemplateRepository;
   }
 
+  @Override
+  public MailTemplate getByMailAction(String mailAction) {
+    return mailTemplateRepository.findByMailActionAndIsActiveIsTrue( mailAction ).orElse(null);
+  }
 
   @Override
   public Page<MailTemplate> findAnyMatching(String filter, Pageable pageable) {

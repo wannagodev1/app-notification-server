@@ -23,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+import org.wannagoframework.notification.domain.MailTemplate;
 import org.wannagoframework.notification.domain.SmsTemplate;
 
 /**
@@ -55,4 +56,5 @@ public interface SmsTemplateRepository extends MongoRepository<SmsTemplate, Stri
   Optional<SmsTemplate> findBySmsActionAndIso3LanguageAndIsActiveIsTrue(
       String smsAction, String iso3Language);
 
+  Optional<SmsTemplate> findBySmsActionAndIsActiveIsTrue(String smsAction);
 }

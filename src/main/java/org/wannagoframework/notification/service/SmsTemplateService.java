@@ -21,6 +21,7 @@ package org.wannagoframework.notification.service;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.wannagoframework.notification.domain.MailTemplate;
 import org.wannagoframework.notification.domain.SmsTemplate;
 
 
@@ -39,4 +40,6 @@ public interface SmsTemplateService extends BaseCrudService<SmsTemplate> {
   SmsTemplate update(SmsTemplate smsTemplate);
 
   void delete(SmsTemplate smsTemplate);
+
+  SmsTemplate getBySmsAction(String smsAction);
 }

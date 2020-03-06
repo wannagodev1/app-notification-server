@@ -26,6 +26,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wannagoframework.commons.utils.HasLogger;
+import org.wannagoframework.notification.domain.MailTemplate;
 import org.wannagoframework.notification.domain.SmsTemplate;
 import org.wannagoframework.notification.repository.SmsTemplateRepository;
 
@@ -40,6 +41,10 @@ public class SmsTemplateServiceImpl implements SmsTemplateService, HasLogger {
     this.smsTemplateRepository = smsTemplateRepository;
   }
 
+  @Override
+  public SmsTemplate getBySmsAction(String smsAction) {
+    return smsTemplateRepository.findBySmsActionAndIsActiveIsTrue( smsAction ).orElse(null);
+  }
 
   @Override
   public Page<SmsTemplate> findAnyMatching(String filter, Pageable pageable) {
