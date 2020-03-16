@@ -113,8 +113,8 @@ public class MailServiceImpl implements MailService, HasLogger {
   }
 
   /**
-   * Save and then send the given email. <br/> The email is firstly saved. Then we try to send it.
-   * At the end the email is updated (in case of status change)
+   * Save and then send the given email. The email is firstly saved. Then we try to send it. At the
+   * end the email is updated (in case of status change)
    *
    * @param mail the email to be sent.
    */
