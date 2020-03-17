@@ -22,7 +22,11 @@ spring:
   activemq:
     broker-url: tcp://localhost:61616
     packages.trusted: org.springframework.remoting.support,java.lang,java.util,org.wannagoframework
-
+  security:
+    user:
+      name: user
+      password: none
+      roles: MONITORING
 
 security:
   oauth2:
@@ -36,17 +40,30 @@ security:
       userInfoUri: http://localhost:5000/uaa/securityUser/current
       tokenInfoUri: http://localhost:5000/uaa/oauth/check_token
 
+management:
+  server:
+    port: 9103
+    ssl.enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  info:
+    git:
+      mode: full
+
 eureka:
   client:
     enabled: false
 
 javamelody:
-  enabled: false
-
-logging:
-  file: logs/app-notification-server.log
-
-info.tags.environment: development
+  enabled: true
+  management-endpoint-monitoring-enabled: true
 
 app:
   sms:
@@ -58,3 +75,9 @@ app:
   tasks:
     emailQueueCronExpression: 0 0/2 * * * ? # Every 2 minutes
     smsQueueCronExpression: 0 0/2 * * * ? # Every 2 minutes
+
+logging:
+  file:
+    name: logs/app-notification-server.log
+
+info.tags.environment: development
