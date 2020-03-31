@@ -118,5 +118,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         .antMatchers("/actuator/**").hasAuthority("MONITORING")
         .antMatchers("/monitoring/**").hasAuthority("MONITORING")
         .anyRequest().authenticated();
+    http.cors();
   }
 }
