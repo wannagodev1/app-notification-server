@@ -55,6 +55,7 @@ public class MailServiceImpl implements MailService, HasLogger {
   private final JavaMailSender emailSender;
 
   private final MailMessageRepository mailMessageRepository;
+
   private final MailTemplateService mailTemplateService;
 
   public MailServiceImpl(JavaMailSender emailSender,
@@ -63,11 +64,6 @@ public class MailServiceImpl implements MailService, HasLogger {
     this.emailSender = emailSender;
     this.mailMessageRepository = mailMessageRepository;
     this.mailTemplateService = mailTemplateService;
-  }
-
-  @Override
-  public MongoRepository<Mail, String> getRepository() {
-    return mailMessageRepository;
   }
 
   @Override
@@ -233,5 +229,10 @@ public class MailServiceImpl implements MailService, HasLogger {
       sendMail(mail);
       mailMessageRepository.save(mail);
     });
+  }
+
+  @Override
+  public MongoRepository<Mail, String> getRepository() {
+    return mailMessageRepository;
   }
 }
