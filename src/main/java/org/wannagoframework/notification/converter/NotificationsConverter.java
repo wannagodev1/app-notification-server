@@ -20,6 +20,10 @@ package org.wannagoframework.notification.converter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.wannagoframework.commons.utils.OrikaBeanMapper;
+import org.wannagoframework.notification.domain.CloudDataMessage;
+import org.wannagoframework.notification.domain.CloudDataMessageTemplate;
+import org.wannagoframework.notification.domain.CloudNotificationMessage;
+import org.wannagoframework.notification.domain.CloudNotificationMessageTemplate;
 import org.wannagoframework.notification.domain.Mail;
 import org.wannagoframework.notification.domain.MailTemplate;
 import org.wannagoframework.notification.domain.Sms;
@@ -52,6 +56,20 @@ public class NotificationsConverter {
         .addMapper(org.wannagoframework.dto.domain.notification.Sms.class, Sms.class);
 
     orikaBeanMapper
+        .addMapper(CloudDataMessage.class,
+            org.wannagoframework.dto.domain.notification.CloudDataMessage.class);
+    orikaBeanMapper
+        .addMapper(org.wannagoframework.dto.domain.notification.CloudDataMessage.class,
+            CloudDataMessage.class);
+
+    orikaBeanMapper
+        .addMapper(CloudNotificationMessage.class,
+            org.wannagoframework.dto.domain.notification.CloudNotificationMessage.class);
+    orikaBeanMapper
+        .addMapper(org.wannagoframework.dto.domain.notification.CloudNotificationMessage.class,
+            CloudNotificationMessage.class);
+
+    orikaBeanMapper
         .addMapper(MailTemplate.class,
             org.wannagoframework.dto.domain.notification.MailTemplate.class);
     orikaBeanMapper
@@ -64,5 +82,20 @@ public class NotificationsConverter {
     orikaBeanMapper
         .addMapper(org.wannagoframework.dto.domain.notification.SmsTemplate.class,
             SmsTemplate.class);
+
+    orikaBeanMapper
+        .addMapper(CloudDataMessageTemplate.class,
+            org.wannagoframework.dto.domain.notification.CloudDataMessageTemplate.class);
+    orikaBeanMapper
+        .addMapper(org.wannagoframework.dto.domain.notification.CloudDataMessageTemplate.class,
+            CloudDataMessageTemplate.class);
+
+    orikaBeanMapper
+        .addMapper(CloudNotificationMessageTemplate.class,
+            org.wannagoframework.dto.domain.notification.CloudNotificationMessageTemplate.class);
+    orikaBeanMapper
+        .addMapper(
+            org.wannagoframework.dto.domain.notification.CloudNotificationMessageTemplate.class,
+            CloudNotificationMessageTemplate.class);
   }
 }

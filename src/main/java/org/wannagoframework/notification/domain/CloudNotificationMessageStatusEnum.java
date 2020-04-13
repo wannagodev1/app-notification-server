@@ -15,38 +15,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.wannagoframework.notification.domain;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author WannaGo Dev1.
  * @version 1.0
- * @since 2019-07-09
+ * @since 2019-02-22
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Document
-@ToString(callSuper = true)
-public class Sms extends BaseEntity {
-
-  private String phoneNumber;
-
-  private String body;
-
-  private String smsAction;
-
-  private SmsStatusEnum smsStatus;
-
-  private String errorMessage;
-
-  private int nbRetry = 0;
-
-  private String applicationName;
-
-  private String iso3Language;
+public enum CloudNotificationMessageStatusEnum {
+  NOT_SENT, SENT, ERROR, RETRYING;
 }

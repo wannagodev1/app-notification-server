@@ -15,7 +15,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.wannagoframework.notification.domain;
 
 import lombok.Data;
@@ -28,19 +27,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @version 1.0
  * @since 2019-07-09
  */
+@Document
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Document
 @ToString(callSuper = true)
-public class Sms extends BaseEntity {
+public class CloudDataMessage extends BaseEntity {
 
-  private String phoneNumber;
+  private String deviceToken;
 
-  private String body;
+  private String data;
 
-  private String smsAction;
+  private String cloudDataMessageAction;
 
-  private SmsStatusEnum smsStatus;
+  private CloudDataMessageStatusEnum cloudDataMessageStatus;
 
   private String errorMessage;
 

@@ -18,7 +18,11 @@
 
 package org.wannagoframework.notification.service;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -26,11 +30,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.wannagoframework.commons.utils.HasLogger;
 import org.wannagoframework.notification.client.SmsProvider;
 import org.wannagoframework.notification.client.SmsResultCodeEnum;
 import org.wannagoframework.notification.domain.Sms;
 import org.wannagoframework.notification.domain.SmsStatusEnum;
+import org.wannagoframework.notification.domain.SmsTemplate;
 import org.wannagoframework.notification.repository.SmsMessageRepository;
 
 /**
@@ -94,22 +100,64 @@ public class SmsServiceImpl implements SmsService, HasLogger {
     return result;
   }
 
-  /**
-   * Save and then send the given sms. The SMS is firstly saved. Then we try to send it. At the end
-   * the SMS is updated (in case of status change)
-   *
-   * @param sms the email to be sent.
-   */
   @Override
-  public void saveAndSendSms(Sms sms) {
-    smsMessageRepository.save(sms);
-    sendSms(sms);
-    smsMessageRepository.save(sms);
+  @Transactional
+  public SmsStatusEnum sendSms(String phoneNumber, String smsAction, Map<String, String> attributes,
+      String iso3Language) {
+    String loggerPrefix = getLoggerPrefix("sendSms");
+
+    Optional<SmsTemplate> _smsTemplate = smsTemplateService
+        .findBySmsAction(smsAction, iso3Language);
+
+    if (_smsTemplate.isPresent()) {
+      SmsTemplate template = _smsTemplate.get();
+      logger().trace(loggerPrefix + "Template found = {}", template);
+
+      if (StringUtils.isNotBlank(phoneNumber)) {
+        return sendAndSave(phoneNumber, template, attributes);
+      } else {
+        logger().warn(loggerPrefix + "No sms to send.");
+      }
+    }
+    return null;
   }
 
-  public void sendSms(Sms sms) {
+  private SmsStatusEnum sendAndSave(String phoneNumber, SmsTemplate smsTemplate,
+      Map<String, String> attributes) {
+    String loggerPrefix = getLoggerPrefix("sendAndSave");
+    logger().trace(loggerPrefix + "Template = {}, attributes = {}", smsTemplate, attributes);
+    Sms smsMessage = new Sms();
+    smsMessage.setSmsStatus(SmsStatusEnum.NOT_SENT);
+    try {
+      logger().debug(loggerPrefix + "Building the message...");
+
+      Template bodyTemplate = new Template(
+          null,
+          smsTemplate.getBody(),
+          new Configuration(Configuration.VERSION_2_3_28)
+      );
+
+      String body = FreeMarkerTemplateUtils.processTemplateIntoString(bodyTemplate, attributes);
+
+      // initialize saved sms data
+      smsMessage.setPhoneNumber(phoneNumber);
+      smsMessage.setBody(body);
+
+      sendSms(smsMessage);
+    } catch (Exception e) {
+      logger().error(loggerPrefix + "Error while preparing mail = {}, message = {}",
+          smsMessage.getSmsAction(), e.getMessage());
+      smsMessage.setSmsStatus(SmsStatusEnum.ERROR);
+    } finally {
+      logger().debug(loggerPrefix + "Email sent status = {}", smsMessage.getSmsStatus());
+    }
+    smsMessage = smsMessageRepository.save(smsMessage);
+    return smsMessage.getSmsStatus();
+  }
+
+  private SmsStatusEnum sendSms(Sms sms) {
     String loggerPrefix = getLoggerPrefix("sendSmsMessage");
-    logger().debug(loggerPrefix + "Sending...");
+    logger().debug(loggerPrefix + "Sending '" + sms.getBody() + "' to " + sms.getBody());
     SmsResultCodeEnum status = smsProvider
         .sendSms(sms.getPhoneNumber(), sms.getBody(), sms.getId());
     if (status.equals(SmsResultCodeEnum.SENT)) {
@@ -122,14 +170,18 @@ public class SmsServiceImpl implements SmsService, HasLogger {
       } else {
         sms.setErrorMessage(status.name());
         sms.setNbRetry(sms.getNbRetry() + 1);
+        sms.setSmsStatus(SmsStatusEnum.RETRYING);
       }
     }
+    sms = smsMessageRepository.save(sms);
+    return sms.getSmsStatus();
   }
 
   @Override
   @Transactional
   public void processNotSentSms() {
-    List<Sms> unsentEsmss = smsMessageRepository.findBySmsStatus(SmsStatusEnum.NOT_SENT);
+    List<Sms> unsentEsmss = smsMessageRepository
+        .findBySmsStatusIn(SmsStatusEnum.NOT_SENT, SmsStatusEnum.RETRYING);
     unsentEsmss.forEach(sms -> {
       sendSms(sms);
       smsMessageRepository.save(sms);

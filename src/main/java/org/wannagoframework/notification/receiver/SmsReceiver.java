@@ -21,8 +21,8 @@ package org.wannagoframework.notification.receiver;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import org.wannagoframework.commons.utils.HasLogger;
-import org.wannagoframework.commons.utils.OrikaBeanMapper;
 import org.wannagoframework.dto.domain.notification.Sms;
+import org.wannagoframework.notification.domain.SmsStatusEnum;
 import org.wannagoframework.notification.service.SmsService;
 
 /**
@@ -34,11 +34,9 @@ import org.wannagoframework.notification.service.SmsService;
 public class SmsReceiver implements HasLogger {
 
   private final SmsService smsService;
-  private final OrikaBeanMapper mapperFacade;
 
-  public SmsReceiver(SmsService smsService, OrikaBeanMapper mapperFacade) {
+  public SmsReceiver(SmsService smsService) {
     this.smsService = smsService;
-    this.mapperFacade = mapperFacade;
   }
 
   /**
@@ -52,9 +50,9 @@ public class SmsReceiver implements HasLogger {
     String loggerPrefix = getLoggerPrefix("onNewSms");
     logger().info(loggerPrefix + "Receiving a request from {} for sending sms to {} ",
         sms.getApplicationName(), sms.getPhoneNumber());
-    final org.wannagoframework.notification.domain.Sms smsBean = mapperFacade
-        .map(sms, org.wannagoframework.notification.domain.Sms.class);
-    smsService.saveAndSendSms(smsBean);
-    logger().info(loggerPrefix + "Sms status {} ", smsBean.getSmsStatus());
+    SmsStatusEnum result = smsService
+        .sendSms(sms.getPhoneNumber(), sms.getSmsAction(), sms.getAttributes(),
+            sms.getIso3Language());
+    logger().info(loggerPrefix + "Sms status {} ", result);
   }
 }

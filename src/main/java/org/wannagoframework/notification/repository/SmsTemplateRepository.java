@@ -23,7 +23,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.wannagoframework.notification.domain.MailTemplate;
 import org.wannagoframework.notification.domain.SmsTemplate;
 
 /**
@@ -33,7 +32,7 @@ import org.wannagoframework.notification.domain.SmsTemplate;
  */
 public interface SmsTemplateRepository extends MongoRepository<SmsTemplate, String> {
 
-  @Query("{'$and' : [{'$or' : [{'subject' : {$regex : ?0, $options: 'i'}}]}, {'isActive' : ?1}]}")
+  @Query("{'$and' : [{'$or' : [{'name' : {$regex : ?0, $options: 'i'}}, {'body' : {$regex : ?0, $options: 'i'}}]}, {'isActive' : ?1}]}")
   Page<SmsTemplate> findByCriteriaAndIsActive(String criteria, Boolean isShowInactive,
       Pageable pageable);
 
@@ -42,7 +41,7 @@ public interface SmsTemplateRepository extends MongoRepository<SmsTemplate, Stri
 
   Page<SmsTemplate> findByIsActive(Boolean isActive, Pageable page);
 
-  @Query(value = "{'$and' : [{'$or' : [{'subject' : {$regex : ?0, $options: 'i'}}]}, {'isActive' : ?1}]}", count = true)
+  @Query(value = "{'$and' : [{'$or' : [{'name' : {$regex : ?0, $options: 'i'}}, {'body' : {$regex : ?0, $options: 'i'}}]}, {'isActive' : ?1}]}", count = true)
   Long countByCriteriaAndIsActive(String criteria, Boolean isActive);
 
   @Query(value = "{'$or' : [{'name' : {$regex : ?0, $options: 'i'}}, {'body' : {$regex : ?0, $options: 'i'}}]}", count = true)

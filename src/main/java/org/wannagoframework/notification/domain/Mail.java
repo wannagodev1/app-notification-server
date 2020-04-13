@@ -54,4 +54,8 @@ public class Mail extends BaseEntity {
   private String errorMessage;
 
   private int nbRetry = 0;
+
+  private String applicationName;
+
+  private String iso3Language;
 }

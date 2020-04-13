@@ -22,24 +22,24 @@ package org.wannagoframework.notification.service;
 import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.wannagoframework.notification.domain.Mail;
-import org.wannagoframework.notification.domain.MailStatusEnum;
+import org.wannagoframework.notification.domain.CloudDataMessage;
+import org.wannagoframework.notification.domain.CloudDataMessageStatusEnum;
 
 /**
  * @author WannaGo Dev1.
  * @version 1.0
  * @since 2019-03-04
  */
-public interface MailService extends BaseCrudService<Mail> {
+public interface CloudDataMessageService extends BaseCrudService<CloudDataMessage> {
 
-  Page<Mail> findAnyMatching(String filter, Pageable pageable);
+  Page<CloudDataMessage> findAnyMatching(String filter, Pageable pageable);
 
   long countAnyMatching(String filter);
 
-  void sendSimpleMail(String to, String subject, String text);
+  void sendSimpleCloudDataMessage(String deviceToken, String body);
 
-  MailStatusEnum sendEmail(String to, String emailAction, Map<String, String> attributes,
-      Map<String, byte[]> attachments, String iso3Language);
+  CloudDataMessageStatusEnum sendCloudDataMessage(String deviceToken, String cloudDataMessageAction,
+      String data, Map<String, String> attributes, String iso3Language);
 
-  void processNotSentEmails();
+  void processNotSentCloudDataMessages();
 }

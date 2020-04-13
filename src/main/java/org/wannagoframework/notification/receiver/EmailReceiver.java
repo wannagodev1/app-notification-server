@@ -21,8 +21,8 @@ package org.wannagoframework.notification.receiver;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import org.wannagoframework.commons.utils.HasLogger;
-import org.wannagoframework.commons.utils.OrikaBeanMapper;
 import org.wannagoframework.dto.domain.notification.Mail;
+import org.wannagoframework.notification.domain.MailStatusEnum;
 import org.wannagoframework.notification.service.MailService;
 
 /**
@@ -34,12 +34,9 @@ import org.wannagoframework.notification.service.MailService;
 public class EmailReceiver implements HasLogger {
 
   private final MailService mailService;
-  private final OrikaBeanMapper mapperFacade;
 
-  public EmailReceiver(MailService mailService,
-      OrikaBeanMapper mapperFacade) {
+  public EmailReceiver(MailService mailService) {
     this.mailService = mailService;
-    this.mapperFacade = mapperFacade;
   }
 
   /**
@@ -54,9 +51,10 @@ public class EmailReceiver implements HasLogger {
     String loggerPrefix = getLoggerPrefix("onNewMail");
     logger().info(loggerPrefix + "Receiving a request from {} for sending email {} to {} ",
         mail.getApplicationName(), mail.getSubject(), mail.getTo());
-    mailService
+    MailStatusEnum result = mailService
         .sendEmail(mail.getTo(), mail.getMailAction(),
             mail.getAttributes(), mail.getAttachements(),
             mail.getIso3Language());
+    logger().info(loggerPrefix + "Sms status {} ", result);
   }
 }

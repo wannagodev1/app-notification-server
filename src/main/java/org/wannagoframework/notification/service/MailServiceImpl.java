@@ -23,6 +23,7 @@ import freemarker.template.Template;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import org.apache.commons.lang3.StringUtils;
@@ -108,37 +109,30 @@ public class MailServiceImpl implements MailService, HasLogger {
     emailSender.send(message);
   }
 
-  /**
-   * Save and then send the given email. The email is firstly saved. Then we try to send it. At the
-   * end the email is updated (in case of status change)
-   *
-   * @param mail the email to be sent.
-   */
-  @Override
-  public void saveAndSendMail(Mail mail) {
-    mailMessageRepository.save(mail);
-    sendMail(mail);
-    mailMessageRepository.save(mail);
-  }
-
   @Transactional
   @Override
-  public void sendEmail(String to, String emailAction, Map<String, String> attributes,
+  public MailStatusEnum sendEmail(String to, String emailAction, Map<String, String> attributes,
       Map<String, byte[]> attachments, String iso3Language) {
     String loggerPrefix = getLoggerPrefix("sendEmail");
 
-    mailTemplateService.findByMailAction(emailAction, iso3Language).ifPresent(template -> {
+    Optional<MailTemplate> _mailTemplate = mailTemplateService
+        .findByMailAction(emailAction, iso3Language);
+
+    if (_mailTemplate.isPresent()) {
+      MailTemplate template = _mailTemplate.get();
       logger().trace(loggerPrefix + "Template found = {}", template);
 
       if (StringUtils.isNotBlank(to)) {
-        sendAndSave(to, template, attributes, attachments);
+        return sendAndSave(to, template, attributes, attachments);
       } else {
-        logger().warn("sendExecutionActionMail() :: no email to send.");
+        logger().warn(loggerPrefix + "No email to send.");
       }
-    });
+    }
+    return null;
   }
 
-  private void sendAndSave(String to, MailTemplate mailTemplate, Map<String, String> attributes,
+  private MailStatusEnum sendAndSave(String to, MailTemplate mailTemplate,
+      Map<String, String> attributes,
       Map<String, byte[]> attachments) {
     String loggerPrefix = getLoggerPrefix("sendAndSave");
     logger().trace(loggerPrefix + "Template = {}, attributes = {}", mailTemplate, attributes);
@@ -153,7 +147,7 @@ public class MailServiceImpl implements MailService, HasLogger {
           new Configuration(Configuration.VERSION_2_3_28)
       );
 
-      String html = FreeMarkerTemplateUtils.processTemplateIntoString(bodyTemplate, attributes);
+      String body = FreeMarkerTemplateUtils.processTemplateIntoString(bodyTemplate, attributes);
 
       Template subjectTemplate = new Template(
           null,
@@ -171,7 +165,7 @@ public class MailServiceImpl implements MailService, HasLogger {
         mailMessage.setCopyTo(mailTemplate.getCopyTo());
       }
       mailMessage.setSubject(subject);
-      mailMessage.setBody(html);
+      mailMessage.setBody(body);
 
       sendMail(mailMessage);
     } catch (Exception e) {
@@ -181,10 +175,12 @@ public class MailServiceImpl implements MailService, HasLogger {
     } finally {
       logger().debug(loggerPrefix + "Email sent status = {}", mailMessage.getMailStatus());
     }
-    mailMessageRepository.save( mailMessage );
+    mailMessage = mailMessageRepository.save(mailMessage);
+
+    return mailMessage.getMailStatus();
   }
 
-  public void sendMail(Mail mail) {
+  private MailStatusEnum sendMail(Mail mail) {
     String loggerPrefix = getLoggerPrefix("sendMailMessage");
     try {
       MimeMessage message = emailSender.createMimeMessage();
@@ -208,23 +204,27 @@ public class MailServiceImpl implements MailService, HasLogger {
       mail.setErrorMessage(null);
       mail.setMailStatus(MailStatusEnum.SENT);
     } catch (MailException | MessagingException mailException) {
-      logger().error(loggerPrefix + "Error while sending mail = {}, message = {}",
-          mail.getMailAction(), mailException.getMessage());
+      logger()
+          .error(loggerPrefix + "Error while sending mail = {}, message = {}", mail.getMailAction(),
+              mailException.getMessage());
       if (mail.getNbRetry() >= 3) {
         mail.setErrorMessage(mailException.getMessage());
         mail.setMailStatus(MailStatusEnum.ERROR);
       } else {
         mail.setErrorMessage(mailException.getMessage());
         mail.setNbRetry(mail.getNbRetry() + 1);
+        mail.setMailStatus(MailStatusEnum.RETRYING);
       }
     }
+    mail = mailMessageRepository.save(mail);
+    return mail.getMailStatus();
   }
 
   @Override
   @Transactional
   public void processNotSentEmails() {
     List<Mail> unsentEmails = mailMessageRepository
-        .findByMailStatus(MailStatusEnum.NOT_SENT);
+        .findByMailStatusIn(MailStatusEnum.NOT_SENT, MailStatusEnum.RETRYING);
     unsentEmails.forEach(mail -> {
       sendMail(mail);
       mailMessageRepository.save(mail);

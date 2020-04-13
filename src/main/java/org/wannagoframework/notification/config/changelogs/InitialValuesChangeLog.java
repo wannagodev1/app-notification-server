@@ -22,6 +22,10 @@ import com.github.mongobee.changeset.ChangeLog;
 import com.github.mongobee.changeset.ChangeSet;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
+import org.wannagoframework.notification.domain.CloudDataMessage;
+import org.wannagoframework.notification.domain.CloudDataMessageTemplate;
+import org.wannagoframework.notification.domain.CloudNotificationMessage;
+import org.wannagoframework.notification.domain.CloudNotificationMessageTemplate;
 import org.wannagoframework.notification.domain.Mail;
 import org.wannagoframework.notification.domain.MailTemplate;
 import org.wannagoframework.notification.domain.Sms;
@@ -41,5 +45,14 @@ public class InitialValuesChangeLog {
   public void createTransactionalCollections2(MongoTemplate mongoTemplate) {
     mongoTemplate.createCollection(MailTemplate.class);
     mongoTemplate.createCollection(SmsTemplate.class);
+  }
+
+  @ChangeSet(order = "003", id = "createTransactionalCollections3", author = "Wanna Go Dev1")
+  public void createTransactionalCollections3(MongoTemplate mongoTemplate) {
+    mongoTemplate.createCollection(CloudDataMessage.class);
+    mongoTemplate.createCollection(CloudNotificationMessage.class);
+
+    mongoTemplate.createCollection(CloudDataMessageTemplate.class);
+    mongoTemplate.createCollection(CloudNotificationMessageTemplate.class);
   }
 }

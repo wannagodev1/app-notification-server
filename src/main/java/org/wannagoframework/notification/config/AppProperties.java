@@ -16,37 +16,23 @@
  */
 
 
-package org.wannagoframework.notification.domain;
+package org.wannagoframework.notification.config;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Getter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * @author WannaGo Dev1.
- * @version 1.0
- * @since 2019-07-09
- */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Document
-@ToString(callSuper = true)
-public class Sms extends BaseEntity {
+@Getter
+@ConfigurationProperties(prefix = "app")
+public class AppProperties {
 
-  private String phoneNumber;
+  private final FirebaseConfig firebase = new FirebaseConfig();
 
-  private String body;
+  @Data
+  public static class FirebaseConfig {
 
-  private String smsAction;
-
-  private SmsStatusEnum smsStatus;
-
-  private String errorMessage;
-
-  private int nbRetry = 0;
-
-  private String applicationName;
-
-  private String iso3Language;
+    private String url;
+    private String credentialsFile;
+    private String projectId;
+  }
 }

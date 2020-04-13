@@ -32,7 +32,7 @@ import org.wannagoframework.notification.domain.MailTemplate;
  */
 public interface MailTemplateRepository extends MongoRepository<MailTemplate, String> {
 
-  @Query("{'$and' : [{'$or' : [{'subject' : {$regex : ?0, $options: 'i'}}]}, {'isActive' : ?1}]}")
+  @Query("{'$and' : [{'$or' : [{'name' : {$regex : ?0, $options: 'i'}},{'subject' : {$regex : ?0, $options: 'i'}}, {'body' : {$regex : ?0, $options: 'i'}}]}, {'isActive' : ?1}]}")
   Page<MailTemplate> findByCriteriaAndIsActive(String criteria, Boolean isShowInactive,
       Pageable pageable);
 
@@ -41,12 +41,11 @@ public interface MailTemplateRepository extends MongoRepository<MailTemplate, St
 
   Page<MailTemplate> findByIsActive(Boolean isActive, Pageable page);
 
-  @Query(value = "{'$and' : [{'$or' : [{'subject' : {$regex : ?0, $options: 'i'}}]}, {'isActive' : ?1}]}", count = true)
+  @Query(value = "{'$and' : [{'$or' : [{'name' : {$regex : ?0, $options: 'i'}},{'subject' : {$regex : ?0, $options: 'i'}}, {'body' : {$regex : ?0, $options: 'i'}}]}, {'isActive' : ?1}]}", count = true)
   Long countByCriteriaAndIsActive(String criteria, Boolean isActive);
 
   @Query(value = "{'$or' : [{'name' : {$regex : ?0, $options: 'i'}},{'subject' : {$regex : ?0, $options: 'i'}}, {'body' : {$regex : ?0, $options: 'i'}}]}", count = true)
   Long countByCriteria(String criteria);
-
 
   long countByIsActive(Boolean isActive);
 
@@ -56,5 +55,4 @@ public interface MailTemplateRepository extends MongoRepository<MailTemplate, St
       String iso3Language);
 
   Optional<MailTemplate> findByMailActionAndIsActiveIsTrue(String mailAction);
-
 }

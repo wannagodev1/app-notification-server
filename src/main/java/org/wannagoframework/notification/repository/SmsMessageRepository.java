@@ -33,9 +33,8 @@ import org.wannagoframework.notification.domain.SmsStatusEnum;
  */
 public interface SmsMessageRepository extends MongoRepository<Sms, String> {
 
-  @Query("{'$and' : [{'$or' : [{'name' : {$regex : ?0, $options: 'i'}}, {'subject' : {$regex : ?0, $options: 'i'}}]}, {'isActive' : ?1}]}")
-  Page<Sms> findByCriteriaAndIsActive(String criteria, Boolean isShowInactive,
-      Pageable pageable);
+  @Query("{'$and' : [{'$or' : [{'body' : {$regex : ?0, $options: 'i'}}, {'phoneNumber' : {$regex : ?0, $options: 'i'}}]}, {'isActive' : ?1}]}")
+  Page<Sms> findByCriteriaAndIsActive(String criteria, Boolean isShowInactive, Pageable pageable);
 
   @Query("{'$or' : [{'body' : {$regex : ?0, $options: 'i'}}, {'phoneNumber' : {$regex : ?0, $options: 'i'}}]}")
   Page<Sms> findByCriteria(String criteria, Pageable pageable);
@@ -43,5 +42,5 @@ public interface SmsMessageRepository extends MongoRepository<Sms, String> {
   @Query(value = "{'$or' : [{'body' : {$regex : ?0, $options: 'i'}}, {'phoneNumber' : {$regex : ?0, $options: 'i'}}]}", count = true)
   long countByCriteria(String criteria);
 
-  List<Sms> findBySmsStatus(SmsStatusEnum smsStatusEnum);
+  List<Sms> findBySmsStatusIn(SmsStatusEnum... smsStatusEnums);
 }

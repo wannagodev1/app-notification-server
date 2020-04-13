@@ -19,9 +19,11 @@
 package org.wannagoframework.notification.service;
 
 
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.wannagoframework.notification.domain.Sms;
+import org.wannagoframework.notification.domain.SmsStatusEnum;
 
 /**
  * @author WannaGo Dev1.
@@ -36,9 +38,8 @@ public interface SmsService extends BaseCrudService<Sms> {
 
   void sendSimpleSms(String to, String text);
 
-  void saveAndSendSms(Sms sms);
-
-  void sendSms(Sms sms);
-
   void processNotSentSms();
+
+  SmsStatusEnum sendSms(String phoneNumber, String smsAction, Map<String, String> attributes,
+      String iso3Language);
 }

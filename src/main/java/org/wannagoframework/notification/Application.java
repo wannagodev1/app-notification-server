@@ -28,12 +28,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.wannagoframework.commons.utils.DefaultProfileUtil;
 import org.wannagoframework.commons.utils.SpringProfileConstants;
+import org.wannagoframework.notification.config.AppProperties;
 
 /**
  * @author WannaGo Dev1.
@@ -43,6 +45,7 @@ import org.wannagoframework.commons.utils.SpringProfileConstants;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableCircuitBreaker
+@EnableConfigurationProperties(AppProperties.class)
 @ComponentScan({"org.wannagoframework.notification", "org.wannagoframework.commons"})
 public class Application implements InitializingBean {
 
