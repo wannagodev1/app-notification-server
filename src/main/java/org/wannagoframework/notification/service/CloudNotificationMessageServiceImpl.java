@@ -113,15 +113,16 @@ public class CloudNotificationMessageServiceImpl implements CloudNotificationMes
     Optional<CloudNotificationMessageTemplate> _cloudNotificationMessageTemplate = cloudNotificationMessageTemplateService
         .findByCloudNotificationMessageAction(cloudNotificationMessageAction, iso3Language);
 
+    CloudNotificationMessageTemplate template = null;
     if (_cloudNotificationMessageTemplate.isPresent()) {
-      CloudNotificationMessageTemplate template = _cloudNotificationMessageTemplate.get();
+      template = _cloudNotificationMessageTemplate.get();
       logger().trace(loggerPrefix + "Template found = {}", template);
+    }
 
-      if (StringUtils.isNotBlank(deviceToken)) {
-        return sendAndSave(deviceToken, title, body, data, template, attributes);
-      } else {
-        logger().warn(loggerPrefix + "No cloudNotificationMessage to send.");
-      }
+    if (StringUtils.isNotBlank(deviceToken)) {
+      return sendAndSave(deviceToken, title, body, data, template, attributes);
+    } else {
+      logger().warn(loggerPrefix + "No cloudNotificationMessage to send.");
     }
     return null;
   }

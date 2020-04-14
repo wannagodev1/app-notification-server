@@ -119,7 +119,7 @@ public class FirebaseCloudMessagingProvider implements CloudNotificationMessageP
 
       builder.putAllData(values);
     }
-    Message message = builder.build();
+    Message message = builder.setToken(deviceToken).build();
 
     try {
       return FirebaseMessaging.getInstance().send(message);
