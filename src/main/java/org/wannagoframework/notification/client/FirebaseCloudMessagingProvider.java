@@ -87,16 +87,21 @@ public class FirebaseCloudMessagingProvider implements CloudNotificationMessageP
     return googleCredential.getAccessToken();
   }
 
-  public String sendCloudDataMessage(String deviceToken, String body, String id) {
+  public String sendCloudDataMessage(String deviceToken, String topic, String body, String id) {
     JsonObject jsonElement = (JsonObject) JsonParser.parseString(body);
     Map<String, String> values = new HashMap<>();
 
     jsonElement.keySet()
         .forEach(s -> values.put(s, jsonElement.getAsJsonPrimitive(s).getAsString()));
-    Message message = Message.builder()
-        .putAllData(values)
-        .setToken(deviceToken)
-        .build();
+    Builder builder = Message.builder()
+        .putAllData(values);
+    if (StringUtils.isNotBlank(deviceToken)) {
+      builder.setToken(deviceToken);
+    } else if (StringUtils.isNotBlank(topic)) {
+      builder.setTopic(topic);
+    }
+
+    Message message = builder.build();
     try {
       return FirebaseMessaging.getInstance().send(message);
     } catch (FirebaseMessagingException e) {

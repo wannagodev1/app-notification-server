@@ -31,6 +31,18 @@ class CloudDataMessageReceiverTest {
     testMessage.setData("{\"Nick\" : \"Mario\",\n"
         + "      \"body\" : \"great match!\"}");
     testMessage.setApplicationName("Test");
+
+    cloudDataMessageReceiver.onNewCloudDataMessage(testMessage);
+  }
+
+  @Test
+  void onNewCloudDataWithTopicMessage() {
+    CloudDataMessage testMessage = new CloudDataMessage();
+    testMessage.setData("{\"Nick\" : \"Mario\",\n"
+        + "      \"body\" : \"great match!\"}");
+    testMessage.setTopic("Test Topic");
+    testMessage.setApplicationName("Test");
+
     cloudDataMessageReceiver.onNewCloudDataMessage(testMessage);
   }
 

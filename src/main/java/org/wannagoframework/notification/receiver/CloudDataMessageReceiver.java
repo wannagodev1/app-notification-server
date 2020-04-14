@@ -58,6 +58,7 @@ public class CloudDataMessageReceiver implements HasLogger {
     CloudDataMessageStatusEnum result = cloudDataMessageService
         .sendCloudDataMessage(cloudDataMessage.getDeviceToken(),
             cloudDataMessage.getCloudDataMessageAction(),
+            cloudDataMessage.getTopic(),
             cloudDataMessage.getData(), cloudDataMessage.getAttributes(),
             cloudDataMessage.getIso3Language());
     logger().info(loggerPrefix + "Cloud Data Message status {} ", result);

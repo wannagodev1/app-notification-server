@@ -36,9 +36,10 @@ public interface CloudDataMessageService extends BaseCrudService<CloudDataMessag
 
   long countAnyMatching(String filter);
 
-  void sendSimpleCloudDataMessage(String deviceToken, String body);
+  void sendSimpleCloudDataMessage(String deviceToken, String topic, String body);
 
   CloudDataMessageStatusEnum sendCloudDataMessage(String deviceToken, String cloudDataMessageAction,
+      String topic,
       String data, Map<String, String> attributes, String iso3Language);
 
   void processNotSentCloudDataMessages();

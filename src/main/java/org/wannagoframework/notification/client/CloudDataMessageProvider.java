@@ -28,5 +28,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CloudDataMessageProvider {
 
-  String sendCloudDataMessage(String deviceToken, String body, String id);
+  String sendCloudDataMessage(String deviceToken, String topic, String body, String id);
 }

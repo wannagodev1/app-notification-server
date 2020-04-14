@@ -62,8 +62,9 @@ public class CloudDataMessageServiceImpl implements CloudDataMessageService, Has
   }
 
   @Override
-  public void sendSimpleCloudDataMessage(String deviceToken, String data) {
-    cloudDataMessageProvider.sendCloudDataMessage(deviceToken, data, UUID.randomUUID().toString());
+  public void sendSimpleCloudDataMessage(String deviceToken, String topic, String data) {
+    cloudDataMessageProvider
+        .sendCloudDataMessage(deviceToken, topic, data, UUID.randomUUID().toString());
   }
 
   @Override
@@ -102,7 +103,7 @@ public class CloudDataMessageServiceImpl implements CloudDataMessageService, Has
   @Override
   @Transactional
   public CloudDataMessageStatusEnum sendCloudDataMessage(String deviceToken,
-      String cloudDataMessageAction, String data, Map<String, String> attributes,
+      String cloudDataMessageAction, String topic, String data, Map<String, String> attributes,
       String iso3Language) {
     String loggerPrefix = getLoggerPrefix("sendCloudDataMessage");
 
@@ -114,15 +115,15 @@ public class CloudDataMessageServiceImpl implements CloudDataMessageService, Has
       logger().trace(loggerPrefix + "Template found = {}", template);
     }
 
-    if (StringUtils.isNotBlank(deviceToken)) {
-      return sendAndSave(deviceToken, data, template, attributes);
+    if (StringUtils.isNotBlank(deviceToken) || StringUtils.isNotBlank(topic)) {
+      return sendAndSave(deviceToken, topic, data, template, attributes);
     } else {
       logger().warn(loggerPrefix + "No cloudDataMessage to send.");
     }
     return null;
   }
 
-  private CloudDataMessageStatusEnum sendAndSave(String deviceToken, String data,
+  private CloudDataMessageStatusEnum sendAndSave(String deviceToken, String topic, String data,
       CloudDataMessageTemplate cloudDataMessageTemplate, Map<String, String> attributes) {
     String loggerPrefix = getLoggerPrefix("sendAndSave");
     logger().trace(loggerPrefix + "Template = {}, attributes = {}", cloudDataMessageTemplate,
@@ -149,7 +150,7 @@ public class CloudDataMessageServiceImpl implements CloudDataMessageService, Has
       // initialize saved cloudDataMessage data
       cloudDataMessage.setDeviceToken(deviceToken);
       cloudDataMessage.setData(_data);
-
+      cloudDataMessage.setTopic(topic);
       sendCloudDataMessage(cloudDataMessage);
     } catch (Exception e) {
       logger().error(loggerPrefix + "Error while preparing mail = {}, message = {}",
@@ -169,7 +170,8 @@ public class CloudDataMessageServiceImpl implements CloudDataMessageService, Has
         loggerPrefix + "Sending '" + cloudDataMessage.getData() + "' to " + cloudDataMessage
             .getDeviceToken());
     String status = cloudDataMessageProvider
-        .sendCloudDataMessage(cloudDataMessage.getDeviceToken(), cloudDataMessage.getData(),
+        .sendCloudDataMessage(cloudDataMessage.getDeviceToken(), cloudDataMessage.getTopic(),
+            cloudDataMessage.getData(),
             cloudDataMessage.getId());
     logger().debug(loggerPrefix + "Result = " + status);
 
